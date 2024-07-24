@@ -428,6 +428,13 @@ function setupAutoRefresh() {
     }, twelveHoursInMilliseconds);
 }
 
+function setupAutoRefresh() {
+    const twelveHoursInMilliseconds = 12 * 60 * 60 * 1000;
+    setTimeout(() => {
+        location.reload();
+    }, twelveHoursInMilliseconds);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     initTypeIt();
     bacaDariFirebase();
@@ -449,4 +456,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Attach the form submission event
     document.getElementById('agendaForm').addEventListener('submit', tambahAgenda);
+
+    // Setup auto-refresh
+    setupAutoRefresh();
 });
