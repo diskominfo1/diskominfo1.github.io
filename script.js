@@ -140,7 +140,7 @@ function tampilkanAgenda() {
         row.innerHTML = `
             <td class="py-3 px-6 text-left">${index + 1}</td>
             <td class="py-3 px-6 text-left wrap-text">${agenda.pemohon || ''}</td>
-            <td class="py-3 px-6 text-left ${dateClass}">${formattedDate}</td>
+            <td class="py-3 px-6 text-center"><span class="date-highlight ${dateClass}">${formattedDate}</span></td>
             <td class="py-3 px-6 text-left wrap-text">${agenda.tempat || ''}</td>
             <td class="py-3 px-6 text-left wrap-text">${agenda.uraian || ''}</td>
             <td class="py-3 px-6 text-left wrap-text">${petugasList}</td>
