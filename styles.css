@@ -55,6 +55,24 @@
     color: black;
 }
 
+.date-highlight {
+    background-color: #1e40af; /* Dark blue color */
+    color: white;
+    padding: 4px 8px;
+    border-radius: 16px; /* Rounded corners */
+    display: inline-block;
+    width: auto;
+    text-align: center;
+}
+
+.date-today,
+.date-tomorrow,
+.date-day-after-tomorrow,
+.date-yesterday,
+.date-day-before-yesterday {
+    color-scheme: date-highlight;
+}
+
 #showFormBtn {
     position: fixed;
     bottom: 20px;
