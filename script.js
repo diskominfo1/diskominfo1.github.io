@@ -67,6 +67,19 @@ function simpanKeFirebase() {
         });
 }
 
+function formatDate(dateString) {
+    const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+    const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    
+    const date = new Date(dateString);
+    const dayName = days[date.getDay()];
+    const day = date.getDate();
+    const monthName = months[date.getMonth()];
+    const year = date.getFullYear();
+    
+    return `${dayName}, ${day} ${monthName} ${year}`;
+}
+
 function getDateClass(dateString) {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -122,11 +135,12 @@ function tampilkanAgenda() {
         }
         
         const dateClass = getDateClass(agenda.tanggal);
+        const formattedDate = formatDate(agenda.tanggal);
         
         row.innerHTML = `
             <td class="py-3 px-6 text-left">${index + 1}</td>
             <td class="py-3 px-6 text-left wrap-text">${agenda.pemohon || ''}</td>
-            <td class="py-3 px-6 text-left ${dateClass}">${agenda.tanggal || ''}</td>
+            <td class="py-3 px-6 text-left ${dateClass}">${formattedDate}</td>
             <td class="py-3 px-6 text-left wrap-text">${agenda.tempat || ''}</td>
             <td class="py-3 px-6 text-left wrap-text">${agenda.uraian || ''}</td>
             <td class="py-3 px-6 text-left wrap-text">${petugasList}</td>
@@ -163,9 +177,12 @@ function resetForm() {
 function tambahAgenda(event) {
     event.preventDefault();
     const editIndex = document.getElementById("editIndex").value;
+    const inputDate = document.getElementById("tanggal").value;
+    const parsedDate = new Date(inputDate);
+    
     const agenda = {
         pemohon: document.getElementById("pemohon").value,
-        tanggal: document.getElementById("tanggal").value,
+        tanggal: parsedDate.toISOString().split('T')[0], // Store as YYYY-MM-DD
         tempat: document.getElementById("tempat").value,
         uraian: document.getElementById("uraian").value,
         petugas: Array.from(document.getElementById("petugas").selectedOptions).map(option => option.value)
