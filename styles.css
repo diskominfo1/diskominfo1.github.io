@@ -146,19 +146,6 @@ h1, h5 {
     margin: 0 5px;
 }
 
-/* Warna berbeda untuk setiap tipe agenda */
-.agenda-type-1 { background-color: #ffcccb; }
-.agenda-type-2 { background-color: #c2f0c2; }
-.agenda-type-3 { background-color: #c2e2f0; }
-.agenda-type-4 { background-color: #f0e68c; }
-.agenda-type-5 { background-color: #dda0dd; }
-
-.agenda-type-1:hover { background-color: #D6E9FF; }
-.agenda-type-2:hover { background-color: #FFE9B3; }
-.agenda-type-3:hover { background-color: #D5E8D4; }
-.agenda-type-4:hover { background-color: #F8BBD0; }
-.agenda-type-5:hover { background-color: #D1C4E9; }
-
 @keyframes blink {
   0% { border-right-color: transparent; }
   50% { border-right-color: #000; }
