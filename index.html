@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda Kegiatan Bidang</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/typeit@8.7.1/dist/index.umd.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 id="title" class="text-3xl font-bold mb-6 text-center"></h1>
+
+        <div id="overlay" class="overlay hidden"></div>
+        <div id="agendaFormWrapper" class="mt-6 hidden sticky-form">
+            <form id="agendaForm">
+                <div class="mb-4">
+                    <label for="pemohon" class="block text-gray-700 text-sm font-bold mb-2">Pemohon</label>
+                    <input type="text" id="pemohon" name="pemohon" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label for="tanggal" class="block text-gray-700 text-sm font-bold mb-2">Tanggal</label>
+                    <input type="date" id="tanggal" name="tanggal" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label for="tempat" class="block text-gray-700 text-sm font-bold mb-2">Tempat</label>
+                    <input type="text" id="tempat" name="tempat" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                </div>
+                <div class="mb-4">
+                    <label for="uraian" class="block text-gray-700 text-sm font-bold mb-2">Uraian Kegiatan</label>
+                    <textarea id="uraian" name="uraian" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="petugas" class="block text-gray-700 text-sm font-bold mb-2">Petugas</label>
+                    <select id="petugas" name="petugas" multiple class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                        <option value="Petugas 1">Kepala Bidang Infras TIK</option>
+                        <option value="Petugas 2">Ayi</option>
+                        <option value="Petugas 3">Dede</option>
+                        <option value="Petugas 4">Saehan</option>
+                        <option value="Petugas 5">Ugan</option>
+                        <option value="Petugas 6">Anton</option>
+                        <option value="Petugas 7">Rifki</option>
+                        <option value="Petugas 8">Anak-anak PKL</option>
+                    </select>
+                </div>
+                <input type="hidden" id="editIndex" value="-1">
+                <div class="flex items-center justify-between">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Simpan
+                    </button>
+                    <button type="button" id="cancelBtn" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Batal
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="bg-white shadow-md rounded my-6 overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                        <th class="py-3 px-6 text-left" style="width: 5%;">No</th>
+                        <th class="py-3 px-6 text-left" style="width: 15%;">Pemohon</th>
+                        <th class="py-3 px-6 text-left" style="width: 10%;">Tanggal</th>
+                        <th class="py-3 px-6 text-left" style="width: 15%;">Tempat</th>
+                        <th class="py-3 px-6 text-left" style="width: 25%;">Uraian Kegiatan</th>
+                        <th class="py-3 px-6 text-left" style="width: 20%;">Petugas</th>
+                        <th class="py-3 px-6 text-center" style="width: 10%;">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="agendaBody">
+                    <!-- Data akan diisi oleh JavaScript -->
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-center mb-4">
+            <button id="showFormBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 rounded w-full ">
+                <i class="fas fa-plus mr-2"></i>Tambah Agenda
+            </button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
