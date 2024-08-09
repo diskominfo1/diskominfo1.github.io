@@ -87,31 +87,18 @@ function getDateClass(dateString) {
     const diffTime = date.getTime() - today.getTime();
     const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
-    if (diffDays === 0) return 'date-today';
-    if (diffDays === 1) return 'date-tomorrow';
-    if (diffDays === 2) return 'date-day-after-tomorrow';
-    if (diffDays === -1) return 'date-yesterday';
-    if (diffDays === -2) return 'date-day-before-yesterday';
-    return '';
+    if (diffDays < 0) return 'bg-red-500';
+    if (diffDays === 0) return 'bg-green-500';
+    if (diffDays === 1) return 'bg-blue-500';
+    if (diffDays === 2) return 'bg-blue-400';
+    return 'bg-blue-800';
 }
 
 function tampilkanAgenda() {
     const agendaBody = document.getElementById("agendaBody");
     agendaBody.innerHTML = "";
 
-    if (!Array.isArray(agendaData)) {
-        console.error('agendaData bukan array:', agendaData);
-        agendaBody.innerHTML = `
-            <tr>
-                <td colspan="7" class="px-5 py-5 border-b border-gray-200 text-sm text-center text-red-500">
-                    Terjadi kesalahan saat memuat data. Struktur data tidak sesuai.
-                </td>
-            </tr>
-        `;
-        return;
-    }
-
-    if (agendaData.length === 0) {
+    if (!Array.isArray(agendaData) || agendaData.length === 0) {
         agendaBody.innerHTML = `
             <tr>
                 <td colspan="7" class="px-5 py-5 border-b border-gray-200 text-sm text-center">
@@ -122,10 +109,15 @@ function tampilkanAgenda() {
         return;
     }
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     agendaData.forEach((agenda, index) => {
         const row = document.createElement('tr');
-        
         row.classList.add(index % 2 === 0 ? 'bg-gray-50' : 'bg-white');
+        
+        const agendaDate = new Date(agenda.tanggal);
+        const isPastEvent = agendaDate < today;
         
         let petugasList = 'Tidak ada petugas';
         if (Array.isArray(agenda.petugas)) {
@@ -134,16 +126,16 @@ function tampilkanAgenda() {
             petugasList = agenda.petugas;
         }
         
-        const dateClass = getDateClass(agenda.tanggal);
+        const dateClass = isPastEvent ? 'bg-red-500' : getDateClass(agenda.tanggal);
         const formattedDate = formatDate(agenda.tanggal);
         
         row.innerHTML = `
-            <td class="py-3 px-6 text-left">${index + 1}</td>
-            <td class="py-3 px-6 text-left wrap-text">${agenda.pemohon || ''}</td>
-            <td class="py-3 px-6 text-center"><span class="date-highlight ${dateClass}">${formattedDate}</span></td>
-            <td class="py-3 px-6 text-left wrap-text">${agenda.tempat || ''}</td>
-            <td class="py-3 px-6 text-left wrap-text">${agenda.uraian || ''}</td>
-            <td class="py-3 px-6 text-left wrap-text">${petugasList}</td>
+            <td class="column-number py-3 px-3 ${isPastEvent ? 'past-event text-gray-500' : ''}">${index + 1}</td>
+            <td class="py-3 px-6 text-left wrap-text ${isPastEvent ? 'past-event text-gray-500' : ''}">${agenda.pemohon || ''}</td>
+            <td class="py-3 px-6 text-center"><span class="date-highlight ${dateClass} text-white px-2 py-1 rounded-full">${formattedDate}</span></td>
+            <td class="py-3 px-6 text-left wrap-text ${isPastEvent ? 'past-event text-gray-500' : ''}">${agenda.tempat || ''}</td>
+            <td class="py-3 px-6 text-left wrap-text ${isPastEvent ? 'past-event text-gray-500' : ''}">${agenda.uraian || ''}</td>
+            <td class="py-3 px-6 text-left wrap-text ${isPastEvent ? 'past-event text-gray-500' : ''}">${petugasList}</td>
             <td class="py-3 px-6 text-center">
                 <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded mr-2" onclick="editAgenda(${index})" title="Edit"><i class="fas fa-edit"></i></button>
                 <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded" onclick="hapusAgenda(${index})" title="Hapus"><i class="fas fa-trash"></i></button>
@@ -272,17 +264,55 @@ function setupAutoRefresh() {
 }
 
 function initTypeIt() {
+    const phrase = "Agenda Kegiatan Bidang Infrastruktur TIK";
+
     new TypeIt("#title", {
-        strings: "Agenda Kegiatan Bidang Infrastruktur TIK",
         speed: 50,
-        waitUntilVisible: true
-    }).go();
+        waitUntilVisible: true,
+        cursor: true,
+        lifeLike: true,
+        loop: true,
+        breakLines: false,
+    })
+    .type(phrase)
+    .pause(1000)
+    .delete(phrase.length)
+    .pause(500)
+    .go();
 }
+
+function updateDateTime() {
+    const now = new Date();
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Jakarta'
+    };
+    const formatter = new Intl.DateTimeFormat('id-ID', options);
+    const formattedDate = formatter.format(now);
+    
+    const [date, time] = formattedDate.split('pukul');
+    const dateTime = `${time.trim()} WIB | ${date.trim()}`;
+    
+    document.getElementById('currentDateTime').textContent = dateTime;
+}
+
+function startClock() {
+    updateDateTime();
+    setInterval(updateDateTime, 1000);
+}
+
 
 document.addEventListener('DOMContentLoaded', () => {
     initTypeIt();
     bacaDariFirebase();
-
+    startClock();
     document.getElementById('showFormBtn').addEventListener('click', toggleForm);
     document.getElementById('cancelBtn').addEventListener('click', () => {
         resetForm();
