@@ -4,41 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda Kegiatan Bidang Infrastruktur TIK</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="bg-gray-100">
+    <!-- Navbar -->
+    <nav class="bg-gray-100 shadow sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          <div class="relative flex items-center justify-between h-16">
+            <div class="flex-1 flex items-center justify-start">
+              <img src="https://sippn.menpan.go.id/images/article/large/kominfo-2-20240524101602.png" alt="Logo" class="h-6 w-auto mr-6">
+              <h1 id="title" class="text-gray-800 text-xl font-bold"></h1>
+            </div>
+            <div id="currentDateTime" class="text-gray-800 text-sm whitespace-nowrap ml-4"></div>
+          </div>
+        </div>
+      </nav>
+
     <div class="container mx-auto p-4">
-        <h1 id="title" class="text-3xl font-bold mb-6 text-center"></h1>
 
         <div id="overlay" class="overlay hidden"></div>
 
-        <div id="agendaFormWrapper" class="mt-6 hidden sticky-form">
+        <div id="agendaFormWrapper" class="mt-6 hidden sticky-form bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <form id="agendaForm">
                 <div class="mb-4">
-                    <label for="pemohon" class="block text-gray-700 text-sm font-bold mb-2">Pemohon</label>
-                    <input type="text" id="pemohon" name="pemohon" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="pemohon">Pemohon</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="pemohon" type="text" required>
                 </div>
-
                 <div class="mb-4">
-                    <label for="tanggal" class="block text-gray-700 text-sm font-bold mb-2">Tanggal</label>
-                    <input type="date" id="tanggal" name="tanggal" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="tanggal">Tanggal</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tanggal" type="date" required>
                 </div>
-
                 <div class="mb-4">
-                    <label for="tempat" class="block text-gray-700 text-sm font-bold mb-2">Tempat</label>
-                    <input type="text" id="tempat" name="tempat" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="tempat">Tempat</label>
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="tempat" type="text" required>
                 </div>
-
                 <div class="mb-4">
-                    <label for="uraian" class="block text-gray-700 text-sm font-bold mb-2">Uraian Kegiatan</label>
-                    <textarea id="uraian" name="uraian" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required></textarea>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="uraian">Uraian Kegiatan</label>
+                    <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="uraian" required></textarea>
                 </div>
-
                 <div class="mb-4">
-                    <label for="petugas" class="block text-gray-700 text-sm font-bold mb-2">Petugas</label>
-                    <select id="petugas" name="petugas" multiple class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" required>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="petugas">Petugas</label>
+                    <select class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="petugas" multiple required>
                         <option value="Kepala Bidang Infras TIK">Kepala Bidang Infras TIK</option>
                         <option value="Ayi">Ayi</option>
                         <option value="Dede">Dede</option>
@@ -50,42 +58,38 @@
                         <option value="Seluruh Staf Infras TIK">Seluruh Staf Infras TIK</option>
                     </select>
                 </div>
-
-                <div class="flex items-center justify-between">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Simpan
-                    </button>
-                    <button type="button" id="cancelBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                        Batal
-                    </button>
-                </div>
-
                 <input type="hidden" id="editIndex" value="-1">
+                <div class="flex items-center justify-between">
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Simpan</button>
+                    <button id="cancelBtn" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">Batal</button>
+                </div>
             </form>
         </div>
 
         <div class="bg-white shadow-md rounded my-6 overflow-x-auto">
-            <table class="min-w-max w-full table-auto">
-                <thead>
-                    <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                        <th class="py-3 px-6 text-left">No</th>
-                        <th class="py-3 px-6 text-left">Pemohon</th>
-                        <th class="py-3 px-6 text-left">Tanggal</th>
-                        <th class="py-3 px-6 text-left">Tempat</th>
-                        <th class="py-3 px-6 text-left">Uraian Kegiatan</th>
-                        <th class="py-3 px-6 text-left">Petugas</th>
-                        <th class="py-3 px-6 text-center">Aksi</th>
-                    </tr>
-                </thead>
-                <tbody id="agendaBody">
-                    <!-- Agenda items will be inserted here -->
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table class="min-w-full">
+                    <thead>
+                        <tr>
+                            <th class="column-number px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-xs font-semibold text-gray-600 uppercase tracking-wider">No</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Pemohon</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tanggal</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Tempat</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Uraian Kegiatan</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Petugas</th>
+                            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="agendaBody">
+                        <!-- Konten tabel akan diisi oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div class="flex justify-center mb-4">
-            <button id="showFormBtn" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                Tambah Agenda
+            <button id="showFormBtn" class="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                +
             </button>
         </div>
     </div>
